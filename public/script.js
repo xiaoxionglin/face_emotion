@@ -14,27 +14,33 @@ const statusBox = document.querySelector("#statusBox");
 const panel = document.querySelector(".panel");
 const dateTime = document.querySelector("#date");
 const models = "/weights"//"https://simhub.github.io/avatar-face-expression/models";
+
+
 let ua = navigator.userAgent.toLowerCase();
 let is_safari = ua.indexOf("safari/") > -1 && ua.indexOf("chrome") < 0;
 let gender = "";
 let age = "";
 let exp = "";
-let angry = "";
-let neutral = "";
-let happy = "";
-let surprised = "";
-let disgusted = "";
-let fearful = "";
-let sad = "";
 let d = new Date();
 let nD = d.toString();
 let sD = nD.split(" ").splice(0, 5);
+
+
+import { v4 as uuidv4 } from '/uuid/index.js';
+let clientId = localStorage.getItem('clientId');
+
+if(!clientId) {
+  clientId = uuidv4(); // Generate a new UUID.
+  localStorage.setItem('clientId', clientId);
+}
 
 // fetch('https://yourserver.com/getIP').then(response => response.text()).then(ip => {
 //   // Use IP to establish WebSocket connection
 //   const socket = new WebSocket('ws://' + ip + ':4443');
 // });
-const socket = new WebSocket('wss://192.168.178.21:4443');
+import CONFIG from './config.js';
+
+const socket = new WebSocket(CONFIG.WS_URL);
 
 socket.onopen = function(event) {
   console.log("Connected to the server:", event);
@@ -90,6 +96,7 @@ async function startVideo() {
     }, 50);
   }
 }
+
 function stopStreamedVideo(videoElem) {
   let stream = videoElem.srcObject;
   let tracks = stream.getTracks();
@@ -110,10 +117,28 @@ video.addEventListener("play", () => {
   }, 200);
 
 
+  // Use the offScreenCanvas for detection instead of the video
+  setInterval(async () => {
+    const offScreenCanvas = document.createElement('canvas');
+    offScreenCanvas.width = video.clientWidth;
+    offScreenCanvas.height = video.clientHeight;
+    const ctx = offScreenCanvas.getContext('2d',{ willReadFrequently: true });
+  
+    // Draw the video frame onto the off-screen canvas (flipped)
+    ctx.translate(offScreenCanvas.width, 0);
+    ctx.scale(-1, 1);
+    ctx.drawImage(video, 0, 0, offScreenCanvas.width, offScreenCanvas.height);
 
-  const canvas = document.getElementById('canvas');
-  const displaySize = { width: video.clientWidth, height: video.clientHeight };
-  console.log(displaySize);
+    const detections = await faceapi
+    .detectAllFaces(ctx.canvas, new faceapi.TinyFaceDetectorOptions())
+    .withFaceLandmarks()
+    .withFaceExpressions()
+    .withAgeAndGender();
+
+
+  // const canvas = document.getElementById('canvas');
+  // const displaySize = { width: video.clientWidth, height: video.clientHeight };
+  // console.log(displaySize);
   // const rect = video.getBoundingClientRect();
   // const displaySize = { width: rect.width, height: rect.height };
   // let displaySize
@@ -122,14 +147,14 @@ video.addEventListener("play", () => {
 
   // });
 
-  faceapi.matchDimensions(canvas, displaySize);
+  // faceapi.matchDimensions(canvas, displaySize);
 
-  setInterval(async () => {
-    const detections = await faceapi
-    .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
-    .withFaceLandmarks()
-    .withFaceExpressions()
-    .withAgeAndGender();
+  // setInterval(async () => {
+  //   const detections = await faceapi
+  //   .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+  //   .withFaceLandmarks()
+  //   .withFaceExpressions()
+  //   .withAgeAndGender();
     if (detections[0]) {
       gender = detections[0].gender;
       // status.innerHTML= "";
@@ -143,12 +168,19 @@ video.addEventListener("play", () => {
       // avatarImgStart.style.display = "none";
       // avatarLamp.style.backgroundColor = "lightgreen";
 
+
+
       exp = detections[0].expressions;
 
 
-      socket.send(JSON.stringify(exp));
+      // socket.send(JSON.stringify(exp));
 
-
+      const payload = {
+        clientId: clientId,
+        emotionData: exp
+      };
+      
+      socket.send(JSON.stringify(payload));
 
 
 

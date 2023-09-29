@@ -18,6 +18,7 @@ const path = require('path');
 app.use(express.static('public'));
 app.use('/libs', express.static(path.join(__dirname, 'libs')));
 app.use('/weights', express.static(path.join(__dirname, 'weights')));
+app.use('/uuid', express.static(path.join(__dirname, 'node_modules/uuid/dist/esm-browser')));
 
 // app.get('/getIP', (req, res) => {
 //   request('http://ipinfo.io/ip', (error, response, body) => {

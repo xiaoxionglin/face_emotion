@@ -10,13 +10,14 @@ body {
 }
 video {
   height: 80%;
+  transform: scaleX(-1);
 }
 canvas {
   position: absolute;
   z-index: 10;
 }
 #startVideoButton{
-  z-index:20;
+  z-index:40;
 }
 #wrapper {
   width: 100%;
