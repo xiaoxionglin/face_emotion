@@ -10,7 +10,7 @@ const port = 4443;
 const httpsOptions = {
   key: fs.readFileSync('key.pem'),
   cert: fs.readFileSync('cert.pem'),
-  passphrase: 'lxxk4n'
+  passphrase: 'Hidalgo'
 };
 
 const path = require('path');
