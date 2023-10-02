@@ -41,16 +41,50 @@ const server = https.createServer(httpsOptions, app).listen(port, '0.0.0.0', () 
 
 const wss = new WebSocket.Server({ server });
 
+
+const receiver='34c33e5a-e6cf-4c50-8dcd-841c09539ede'
+
+// Object to store client WebSocket connections using clientId as key
+const clients = {};
+
 wss.on('connection', (ws) => {
   console.log('Client connected');
+  
   ws.on('message', (message) => {
-    const emotionData = JSON.parse(message);
-    console.log('Received:', emotionData);
-    // Process or save the emotionData as required
+    try {
+      const payload = JSON.parse(message);
+      const { clientId, emotionData } = payload;
+      
+      if (clientId) {
+        // Update the clients map with the current WebSocket connection
+        clients[clientId] = ws;
+      }
+      console.log(clientId);
+      console.log('Received:', emotionData);
+
+      if (receiver){
+        sendMessageToClient(receiver,message);
+      }
+
+      // Process or save the emotionData as required
+    } catch (error) {
+      console.error("Error parsing message:", error);
+    }
   });
+
   ws.send('Welcome to the server!');
 });
 
 wss.onerror = function(error) {
   console.error("WebSocket Error:", error);
 };
+
+// Function to send a message to a specific client using its clientId
+function sendMessageToClient(clientId, message) {
+  const clientWs = clients[clientId];
+  if (clientWs && clientWs.readyState === WebSocket.OPEN) {
+    clientWs.send(message);
+  } else {
+    console.error("Client not connected or WebSocket not in OPEN state");
+  }
+}
