@@ -1,3 +1,6 @@
+let currentHost = window.location.hostname;
+let wsURL = `wss://${currentHost}:4443/`;
+
 const video = document.getElementById("video");
 const startVideoButton = document.getElementById("startVideoButton");
 const stopStreaming = document.querySelector("#stopStreaming");
@@ -40,79 +43,81 @@ if(!clientId) {
 // });
 import CONFIG from './config.js';
 
-// const socket = new WebSocket(CONFIG.WS_URL);
-
-// const WebSocket = require('ws');
-
-const ips = CONFIG.WS_URLS;//['ws://192.168.1.10', 'ws://192.168.1.11', 'ws://192.168.1.12'];
-// console.log(ips);
-// const socket = new WebSocket('wss://localhost:4443');
-let socket;
-
-
-
-async function connectToServer(ip) {
-  return new Promise((resolve, reject) => {
-    const localSocket = new WebSocket(ip);
-    const timeout = setTimeout(() => {
-      localSocket.close();
-      reject(new Error('Connection timeout for ' + ip));
-    }, 2000); // 5 seconds timeout for example.
-
-    localSocket.onopen = function () {
-      clearTimeout(timeout);
-      console.log('connected to the server', ip);
-      resolve(localSocket);
-    };
-
-    localSocket.onmessage = function (event) {
-      console.log("Received from server:", event.data);
-    };
-
-    localSocket.onerror = function (e) {
-      clearTimeout(timeout);
-      console.error('failed to connect to', ip, e.message);
-      reject(new Error('Failed to connect'));
-    };
-
-    localSocket.onclose = function (e) {
-      if (e.wasClean === false) {
-        clearTimeout(timeout);
-        reject(new Error('Connection was closed before being established'));
-      }
-    };
-  });
-}
-
-async function connectSequentially(ips) {
-    for (let ip of ips) {
-        try {
-            const localSocket = await connectToServer(ip);
-            socket = localSocket;
-            break;
-        } catch (e) {
-            console.log(e.message);
-            await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for 1 second before trying the next IP.
-        }
-    }
-}
-
-connectSequentially(ips);
 
 
 
 
+// const ips = CONFIG.WS_URLS;//['ws://192.168.1.10', 'ws://192.168.1.11', 'ws://192.168.1.12'];
+// // console.log(ips);
+// // const socket = new WebSocket('wss://localhost:4443');
+// let socket;
 
-// socket.onopen = function(event) {
-//   console.log("Connected to the server:", event);
-// };
 
-// socket.onmessage = function(event) {
-//   console.log("Received from server:", event.data);
-// };
-// socket.onclose = function(event) {
-//   console.log("WebSocket connection closed:", event.code, event.reason);
-// };
+
+// async function connectToServer(ip) {
+//   return new Promise((resolve, reject) => {
+//     const localSocket = new WebSocket(ip);
+//     const timeout = setTimeout(() => {
+//       localSocket.close();
+//       reject(new Error('Connection timeout for ' + ip));
+//     }, 2000); // 5 seconds timeout for example.
+
+//     localSocket.onopen = function () {
+//       clearTimeout(timeout);
+//       console.log('connected to the server', ip);
+//       resolve(localSocket);
+//     };
+
+//     localSocket.onmessage = function (event) {
+//       console.log("Received from server:", event.data);
+//     };
+
+//     localSocket.onerror = function (e) {
+//       clearTimeout(timeout);
+//       console.error('failed to connect to', ip, e.message);
+//       reject(new Error('Failed to connect'));
+//     };
+
+//     localSocket.onclose = function (e) {
+//       if (e.wasClean === false) {
+//         clearTimeout(timeout);
+//         reject(new Error('Connection was closed before being established'));
+//       }
+//     };
+//   });
+// }
+
+// async function connectSequentially(ips) {
+//     for (let ip of ips) {
+//         try {
+//             const localSocket = await connectToServer(ip);
+//             socket = localSocket;
+//             break;
+//         } catch (e) {
+//             console.log(e.message);
+//             await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for 1 second before trying the next IP.
+//         }
+//     }
+// }
+
+// connectSequentially(ips);
+
+
+
+const socket = new WebSocket(wsURL);
+
+socket.onopen = function(event) {
+  console.log("Connected to the server:", event);
+};
+
+socket.onmessage = function(event) {
+  console.log("Received from server:", event.data);
+};
+socket.onclose = function(event) {
+  console.log("WebSocket connection closed:", event.code, event.reason);
+};
+
+
 
 
 startVideoButton.addEventListener("click", function() {
