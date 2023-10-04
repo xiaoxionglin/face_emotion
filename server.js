@@ -59,7 +59,7 @@ wss.on('connection', (ws) => {
         // Update the clients map with the current WebSocket connection
         clients[clientId] = ws;
       }
-      console.log(clientId);
+      console.log('Client ID:', clientId);
       console.log('Received:', emotionData);
 
       if (receiver){

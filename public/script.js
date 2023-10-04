@@ -108,6 +108,10 @@ const socket = new WebSocket(wsURL);
 
 socket.onopen = function(event) {
   console.log("Connected to the server:", event);
+  let dataToSend = {
+    clientId: clientId
+  };
+  socket.send(JSON.stringify(dataToSend));
 };
 
 socket.onmessage = function(event) {
