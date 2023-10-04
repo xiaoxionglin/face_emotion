@@ -1,85 +1,59 @@
 <!DOCTYPE html>
+
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <title>Face expression recognition for Who Are You </title>
-
-  <link rel='stylesheet' href='https://unpkg.com/spectre.css@0.5.8/dist/spectre-icons.min.css'>
-  <link rel='stylesheet' href='https://unpkg.com/spectre.css@0.5.8/dist/spectre.min.css'>
-  <link rel="stylesheet" href="./style.css">
-  <script src="../libs/face-api.min.js"></script>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles.css">
+    <title>Homepage</title>
 </head>
-
 <body>
-  <!-- partial:index.partial.html -->
-  <code id="customToast" class="toast">
- emotion detection
-</code>
+    <!-- ... other body content ... -->
 
-  
+    <a id="emotionLink" href="#" class="button">Go to Emotion Page</a>
 
-  <div id="wrapper">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let currentHost = window.location.hostname;
+            let emotionURL = `https://${currentHost}:4443/emotion`;
+
+            // Set the href for the link
+            document.getElementById('emotionLink').href = emotionURL;
+        });
+    </script>
+
+    <h1>emotion recognition website</h1>
     
-    <div id="video-wrapper">
-      <video id="video"></video>
-      <canvas id="canvas"></canvas>
-    </div>
-    <button id="startVideoButton">Start Video</button>
-    <div id="content-wrapper">
+    <p>developed for <a href="https://hidalgofestival.de/hidalgo-kollektiv/produktion/who-are-you/">Hidalgo festival "Who Are You"</a></p>
+    
+    <p>It captures audience's facial emotion and send the realtime data to modify the art song performance.</p>
+    
+    <h1>important parameters before serving the website</h1>
+    
+    
+    <h2>should you want relay the data to some client</h2>
+    <p>after successful connection to the receiving client (i.e., your touchdesigner), the server should log its ID. Copy this client ID and put it in the "receiver" constant in ./server.js</p>
+    
+    <h2>generate your own key</h2>
+    <p><code>openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365</code></p>
+    
+    <p>change httpsOptions.passphrase in ./server.js accordingly</p>
+    
+    <h1>references</h1>
+    
+    <p>face recognition and emotion detection using: <a href="https://github.com/justadudewhohacks/face-api.js">https://github.com/justadudewhohacks/face-api.js</a></p>
+    <p>webpage visuals adapted from: <a href="https://github.com/SimHub/avatar-face-expression">https://github.com/SimHub/avatar-face-expression</a></p>
 
-      <div class="panel">
-        <i id="stopStreaming" class="icon icon-cross"></i>
-        <code id="date"></code>
-        <div id="statusBox">
-          <div id="loader">
-            <span class="avatar-lamp"></span>
-            <span class="loading"></span>
-          </div>
-          <div id="status"><code id="statusCode" class="label"></code></div>
-        </div>
-        <div id="imgbox">
-          <img class="img-avatar-start neutral-male avatar-blur"
-            src="https://simhub.github.io/avatar-face-expression/img/avatar/svg/neutral_male.svg" alt="avatar" />
-          <img class="img-avatar neutral-male"
-            src="https://simhub.github.io/avatar-face-expression/img/avatar/svg/neutral_male.svg" alt="avatar" />
-          <img class="img-avatar neutral-female"
-            src="https://simhub.github.io/avatar-face-expression/img/avatar/svg/neutral_female.svg" alt="avatar" />
-          <img class="img-avatar angry-male"
-            src="https://simhub.github.io/avatar-face-expression/img/avatar/svg/angry_male.svg" alt="avatar" />
-          <img class="img-avatar angry-female"
-            src="https://simhub.github.io/avatar-face-expression/img/avatar/svg/angry_female.svg" alt="avatar" />
-          <img class="img-avatar disgusted-male"
-            src="https://simhub.github.io/avatar-face-expression/img/avatar/svg/disgusted_male.svg" alt="avatar" />
-          <img class="img-avatar disgusted-female"
-            src="https://simhub.github.io/avatar-face-expression/img/avatar/svg/disgusted_female.svg" alt="avatar" />
-          <img class="img-avatar fearful-male"
-            src="https://simhub.github.io/avatar-face-expression/img/avatar/svg/fearful_male.svg" alt="avatar" />
-          <img class="img-avatar fearful-female"
-            src="https://simhub.github.io/avatar-face-expression/img/avatar/svg/fearful_female.svg" alt="avatar" />
-          <img class="img-avatar happy-male"
-            src="https://simhub.github.io/avatar-face-expression/img/avatar/svg/happy_male.svg" alt="avatar" />
-          <img class="img-avatar happy-female"
-            src="https://simhub.github.io/avatar-face-expression/img/avatar/svg/happy_female.svg" alt="avatar" />
-          <img class="img-avatar sad-male"
-            src="https://simhub.github.io/avatar-face-expression/img/avatar/svg/sad_male.svg" alt="avatar" />
-          <img class="img-avatar sad-female"
-            src="https://simhub.github.io/avatar-face-expression/img/avatar/svg/sad_female.svg" alt="avatar" />
-          <img class="img-avatar surprised-male"
-            src="https://simhub.github.io/avatar-face-expression/img/avatar/svg/surprised_male.svg" alt="avatar" />
-          <img class="img-avatar surprised-female"
-            src="https://simhub.github.io/avatar-face-expression/img/avatar/svg/surprised_female.svg" alt="avatar" />
-        </div>
-        <div id="panelBox">
-          <div class="panel-subtitle" id="expression-txt"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- partial -->
-  <script src='libs/face-api.min.js'></script>
-  <script type="module" src="./script.js"></script>
+
 </body>
+
+<!-- Other content of your website -->
+
+<footer>
+    <div class="footer-content">
+        <p>Xiao-Xiong Lin &copy; 2023. All rights reserved.</p>
+        <p>For SSL or other inquiries, <a href="mailto:ln.xxng@gmail.com">contact me</a>.</p>
+    </div>
+</footer>
 
 </html>

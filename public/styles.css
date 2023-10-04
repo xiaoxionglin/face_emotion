@@ -1,0 +1,99 @@
+/* Reset some default browser styling */
+body, h1, h2, p, a {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f4f4f4;
+    color: #333;
+    padding: 20px;
+    line-height: 1.6;
+    /* Add left indent for all content */
+
+    padding-left: 80px; /* Adjust this value for more or less indentation */
+}
+
+h1, h2 {
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 24px;
+    border-bottom: 2px solid #333;
+    padding-bottom: 10px;
+}
+
+h2 {
+    font-size: 20px;
+    color: #555;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+p {
+    margin-bottom: 10px;
+    font-size: 16px;
+}
+
+a {
+    color: #007BFF;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+a:hover {
+    color: #0056b3;
+}
+
+code {
+    background-color: #e9e9e9;
+    padding: 2px 5px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+/* Style for the crossed-out text */
+s {
+    text-decoration: line-through;
+    color: #999;
+}
+/* Existing Styles */
+/* ... */
+
+
+
+/* Style "Go to Emotion Page" as a button */
+a.button {
+    display: block;
+    background-color: #007BFF;
+    color: #fff;
+    padding: 10px 15px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+    text-align: center;
+}
+
+a.button:hover {
+    background-color: #0056b3;
+}
+
+/* Existing styles... */
+
+.footer-content {
+    border-top: 1px solid #ccc;  /* Adds a border line above the footer content */
+    margin-top: 20px;           /* Adds some space above the footer content */
+    padding-top: 10px;          /* Adds some space within the footer content */
+    text-align: center;         /* Centers the text */
+}
+
+.footer-content a {
+    color: #007BFF;            /* Link color */
+    text-decoration: none;    /* Removes the underline from the link */
+}
+
+.footer-content a:hover {
+    text-decoration: underline; /* Adds an underline to the link when hovered */
+}
