@@ -14,7 +14,7 @@ It captures audience's facial emotion and send the realtime data to modify the a
 now the IP is automatically detected, no need to be manually put in
 
 ## should you want relay the data to some client
-after successfully receiving message from the desired receiving client (i.e., your touchdesigner), copy its client ID and put it in the "receiver" constant in ./server.js
+after successful connection to the receiving client (i.e., your touchdesigner), the server should log its ID. Copy this client ID and put it in the "receiver" constant in ./server.js
 
 ## generate your own key
 
