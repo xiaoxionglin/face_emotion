@@ -1,48 +1,63 @@
+
+
+
 const express = require('express');
 // const request = require('request'); // using 'request' npm package
 const https = require('https');
 const fs = require('fs');
 const WebSocket = require('ws');
 
-const app = express();
-const port = 4443;
 
+
+
+
+// Create two Express app instances
+const appHome = express();
+const appEmotion = express();
+// const app = express();
+const portEmotion = 4443;
+
+
+
+const path = require('path');
+
+appEmotion.use('/emotion',express.static('public/emotion'));
+appEmotion.use('/libs', express.static(path.join(__dirname, 'libs')));
+console.log(path.join(__dirname, 'libs'));
+appEmotion.use('/weights', express.static(path.join(__dirname, 'weights')));
+appEmotion.use('/uuid', express.static(path.join(__dirname, 'node_modules/uuid/dist/esm-browser')));
+
+// Serve static files for the homepage
+appHome.use(express.static(path.join(__dirname, 'public')));
+
+// // Serve static files for the emotion page
+// appEmotion.use(express.static(path.join(__dirname, 'public/emotion')));
+
+// SSL certificate details
 const httpsOptions = {
   key: fs.readFileSync('key.pem'),
   cert: fs.readFileSync('cert.pem'),
   passphrase: 'Hidalgo'
 };
 
-const path = require('path');
-
-app.use(express.static('public'));
-app.use('/libs', express.static(path.join(__dirname, 'libs')));
-app.use('/weights', express.static(path.join(__dirname, 'weights')));
-app.use('/uuid', express.static(path.join(__dirname, 'node_modules/uuid/dist/esm-browser')));
-
-// app.get('/getIP', (req, res) => {
-//   request('http://ipinfo.io/ip', (error, response, body) => {
-//     if (!error && response.statusCode == 200) {
-//       res.send(body);
-//     } else {
-//       res.send("Error getting IP");
-//     }
-//   });
-// });
-
-// app.listen(9000);
-
-
-const server = https.createServer(httpsOptions, app).listen(port, '0.0.0.0', () => {
-  console.log(`Server running at https://localhost:${port}/`);
+// Listen on port 80 for the homepage
+appHome.listen(80, () => {
+    console.log('Homepage is running on http://localhost:80');
 });
+
+// Listen on port 4443 for the emotion page using HTTPS
+const server=https.createServer(httpsOptions, appEmotion).listen(portEmotion, '0.0.0.0', () => {
+  console.log(`Server running at https://localhost:${portEmotion}/`);
+});
+
+
 
 
 
 const wss = new WebSocket.Server({ server });
 
 
-const receiver='34c33e5a-e6cf-4c50-8dcd-841c09539ede'
+const receiver='jupyter-xxl'
 
 // Object to store client WebSocket connections using clientId as key
 const clients = {};
