@@ -4,9 +4,11 @@
 <head>
   <meta charset="UTF-8">
   <title>Face expression recognition for Who Are You </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link rel='stylesheet' href='https://unpkg.com/spectre.css@0.5.8/dist/spectre-icons.min.css'>
   <link rel='stylesheet' href='https://unpkg.com/spectre.css@0.5.8/dist/spectre.min.css'>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="./style.css">
   <script src="/libs/face-api.min.js"></script>
 
@@ -20,8 +22,12 @@
 
   
 
+
+
   <div id="wrapper">
-    
+
+
+    <code id="date"></code>
     <div id="video-wrapper">
       <video id="video"></video>
       <canvas id="canvas"></canvas>
@@ -31,7 +37,7 @@
 
       <div class="panel">
         <i id="stopStreaming" class="icon icon-cross"></i>
-        <code id="date"></code>
+
         <div id="statusBox">
           <div id="loader">
             <span class="avatar-lamp"></span>
@@ -39,45 +45,23 @@
           </div>
           <div id="status"><code id="statusCode" class="label"></code></div>
         </div>
-        <div id="imgbox">
-          <img class="img-avatar-start neutral-male avatar-blur"
-            src="https://simhub.github.io/avatar-face-expression/img/avatar/svg/neutral_male.svg" alt="avatar" />
-          <img class="img-avatar neutral-male"
-            src="https://simhub.github.io/avatar-face-expression/img/avatar/svg/neutral_male.svg" alt="avatar" />
-          <img class="img-avatar neutral-female"
-            src="https://simhub.github.io/avatar-face-expression/img/avatar/svg/neutral_female.svg" alt="avatar" />
-          <img class="img-avatar angry-male"
-            src="https://simhub.github.io/avatar-face-expression/img/avatar/svg/angry_male.svg" alt="avatar" />
-          <img class="img-avatar angry-female"
-            src="https://simhub.github.io/avatar-face-expression/img/avatar/svg/angry_female.svg" alt="avatar" />
-          <img class="img-avatar disgusted-male"
-            src="https://simhub.github.io/avatar-face-expression/img/avatar/svg/disgusted_male.svg" alt="avatar" />
-          <img class="img-avatar disgusted-female"
-            src="https://simhub.github.io/avatar-face-expression/img/avatar/svg/disgusted_female.svg" alt="avatar" />
-          <img class="img-avatar fearful-male"
-            src="https://simhub.github.io/avatar-face-expression/img/avatar/svg/fearful_male.svg" alt="avatar" />
-          <img class="img-avatar fearful-female"
-            src="https://simhub.github.io/avatar-face-expression/img/avatar/svg/fearful_female.svg" alt="avatar" />
-          <img class="img-avatar happy-male"
-            src="https://simhub.github.io/avatar-face-expression/img/avatar/svg/happy_male.svg" alt="avatar" />
-          <img class="img-avatar happy-female"
-            src="https://simhub.github.io/avatar-face-expression/img/avatar/svg/happy_female.svg" alt="avatar" />
-          <img class="img-avatar sad-male"
-            src="https://simhub.github.io/avatar-face-expression/img/avatar/svg/sad_male.svg" alt="avatar" />
-          <img class="img-avatar sad-female"
-            src="https://simhub.github.io/avatar-face-expression/img/avatar/svg/sad_female.svg" alt="avatar" />
-          <img class="img-avatar surprised-male"
-            src="https://simhub.github.io/avatar-face-expression/img/avatar/svg/surprised_male.svg" alt="avatar" />
-          <img class="img-avatar surprised-female"
-            src="https://simhub.github.io/avatar-face-expression/img/avatar/svg/surprised_female.svg" alt="avatar" />
-        </div>
+        
         <div id="panelBox">
           <div class="panel-subtitle" id="expression-txt"></div>
         </div>
       </div>
+
+      <div class="chart-container" >
+        <canvas id="emotionChart"></canvas>
+      </div>
     </div>
+    
+
   </div>
+
   <!-- partial -->
+  
+
   <script type="module" src="./script.js"></script>
 </body>
 

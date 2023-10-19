@@ -6,9 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/styles.css">
     <title>Homepage</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon.png" />
 </head>
 <body>
     <!-- ... other body content ... -->
+    <div class="title-bar">
+        <h1>Emotion detection</h1>
+    </div>
+    <h1>You influence the concert! </h1>
+
+<p>As part of our concert performance, we are exploring the integration of art and technology by capturing real-time emotional responses.
+    <br>
+    By using facial emotion detection technology, we aim to provide a unique, interactive experience that allows the performance to adapt based on collective audience reactions. 
+    <br>
+    Your facial data will be processed in real-time <b>locally on your cell phone</b> to determine emotional reactions, which means <b>we won't store or share identifiable data</b>. 
+    <br>
+    Example transmitted data:
+    <br>
+      <img src="/assets/example_emotion_data.png" alt="Example Emotion Data">
+      
+    <br>
+    We also assure you that any data collected will be used solely for the purpose of enhancing the concert experience and for our research to better understand audience engagement. 
+    <br>
+    Your privacy is of the utmost importance to us. By proceeding, you give us your consent to capture and utilize your emotion data.
+</p>
+
+
 
     <a id="emotionLink" href="#" class="button">Go to Emotion Page</a>
 
@@ -22,27 +45,7 @@
         });
     </script>
 
-    <h1>emotion recognition website</h1>
-    
-    <p>developed for <a href="https://hidalgofestival.de/hidalgo-kollektiv/produktion/who-are-you/">Hidalgo festival "Who Are You"</a></p>
-    
-    <p>It captures audience's facial emotion and send the realtime data to modify the art song performance.</p>
-    
-    <h1>important parameters before serving the website</h1>
-    
-    
-    <h2>should you want relay the data to some client</h2>
-    <p>after successful connection to the receiving client (i.e., your touchdesigner), the server should log its ID. Copy this client ID and put it in the "receiver" constant in ./server.js</p>
-    
-    <h2>generate your own key</h2>
-    <p><code>openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365</code></p>
-    
-    <p>change httpsOptions.passphrase in ./server.js accordingly</p>
-    
-    <h1>references</h1>
-    
-    <p>face recognition and emotion detection using: <a href="https://github.com/justadudewhohacks/face-api.js">https://github.com/justadudewhohacks/face-api.js</a></p>
-    <p>webpage visuals adapted from: <a href="https://github.com/SimHub/avatar-face-expression">https://github.com/SimHub/avatar-face-expression</a></p>
+
 
 
 </body>

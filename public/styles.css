@@ -12,7 +12,7 @@ body {
     line-height: 1.6;
     /* Add left indent for all content */
 
-    padding-left: 80px; /* Adjust this value for more or less indentation */
+    padding-left: 5%; /* Adjust this value for more or less indentation */
 }
 
 h1, h2 {
@@ -74,6 +74,7 @@ a.button {
     transition: background-color 0.3s;
     margin-top: 20px;
     text-align: center;
+    font-size: 24px;
 }
 
 a.button:hover {
@@ -96,4 +97,11 @@ a.button:hover {
 
 .footer-content a:hover {
     text-decoration: underline; /* Adds an underline to the link when hovered */
+}
+
+.title-bar {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
 }
