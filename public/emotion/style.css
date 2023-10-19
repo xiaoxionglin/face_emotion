@@ -8,8 +8,53 @@ body {
   align-items: center;
   font-family: 'Verdana';
 }
+/* div.consent-form {
+  width: 80%;
+  display:block;
+} */
+/* Make the text inside the form bigger */
+#consentForm {
+  font-size: 24px;  /* Adjust this value as needed */
+}
+#consentFormDiv {
+  font-size: 24px;  /* Adjust this value as needed */
+  height:80%;
+  width:80%;
+  display:block;
+}
+/* Make the checkboxes bigger */
+#consentForm input[type="checkbox"] {
+  transform: scale(1.5);  /* Adjust the scaling factor as needed */
+  margin-right: 10px;  /* Adds some spacing after the checkbox */
+}
+
+/* Make the submit button bigger */
+#consentForm input[type="submit"] {
+  font-size: 30px;  /* Adjust this value as needed */
+  padding: 30px 50px;  /* Adjust padding values for desired button size */
+  cursor: pointer;  /* Makes it clear it's clickable */
+}
+
+/* canvas#emotionChart{
+  position:absolute ;
+  width:80vw ;
+  height:30vh;
+  display:flex;
+  flex-direction: column;
+} */
+div.chart-container{
+  width:80%;
+  height:20%;
+  position: fixed;
+  bottom: 0;
+  left: 50%;   
+  transform: translateX(-50%);  
+  z-index: 10;   /* This makes sure the canvas stays on top of other elements. Adjust as needed. */
+  padding-top:10px;
+}
+
 video {
-  height: 80%;
+  height: 100%;
   transform: scaleX(-1);
 }
 canvas {
@@ -21,7 +66,7 @@ canvas {
 }
 #wrapper {
   width: 100%;
-  height: 50vh;
+  height: 70vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -37,7 +82,7 @@ canvas {
 }
 #content-wrapper {
   width: 100%;
-  height: 50vh;
+  height: 10vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -119,15 +164,17 @@ canvas {
   bottom: 0;
 }
 
-#date {
-  width: 210px;
+code#date {
+  /* width: 210px; */
+  display:flex;
   color: #03a9f4;
   background: none;
   border-radius: 10px;
   /* transform: rotateZ(90deg); */
-  position: absolute;
-  left: 0px;
-  top: 100px;
+  position: flex;
+  padding: 15px 15px;
+  /* left: 0px;
+  top: -30px; */
 }
 #stopStreaming {
   display: none;
@@ -137,6 +184,7 @@ canvas {
   color: #bbbbbb;
   cursor: pointer;
   transition: all 200ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  z-index: 200;
 }
 code.label {
   background: none;
@@ -171,21 +219,7 @@ code.label {
   box-shadow: 1px 5px 20px -8px;
   transition: all 200ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
-.chip {
-  font-size: 1.5em;
-  border-radius: 0;
-  height: 30px;
-}
-.gender-chip,
-.age-chip {
-  flex: 1;
-  font-size: 3.2em;
-  height: 30px;
-}
-.age-chip {
-}
-.gender-chip {
-}
+
 .loading {
   position: absolute;
   margin-left: 10px;
