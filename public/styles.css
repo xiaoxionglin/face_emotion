@@ -102,6 +102,44 @@ a.button:hover {
 .title-bar {
     background-color: #333;
     color: white;
-    text-align: center;
-    padding: 10px 0;
+    text-align: left;
+    /* align-content: right; */
+    padding-left: 2em;
+    /* padding: 10px 0; */
+}
+
+.language-switcher {
+    display:block;
+    
+
+    margin: 0px;
+    text-align:right;
+    padding-right: 10px;
+    padding-bottom: 10px;
+}
+
+
+.btn {
+    background: none;        /* Remove the background color */
+    border: none;            /* Remove the border */
+    padding: 0;              /* Remove any padding */
+    margin: 0;               /* Remove any margin */
+    cursor: pointer;         /* Retain the pointer cursor to indicate it's clickable */
+    color: inherit;          /* Use the inherited color, or specify your own */
+    text-decoration: underline; /* Optional: underline to indicate it's clickable */
+    font-family: inherit;    /* Use the inherited font, or specify your own */
+    font-size: inherit;      /* Use the inherited font size, or specify your own */
+    outline: none;           /* Optional: Remove the focus outline */
+}
+
+/* Optional: Add hover effect to give feedback to users when they hover over the buttons */
+.btn:hover {
+    text-decoration: none;   /* Remove underline on hover */
+    color: blue;             /* Change color on hover, adjust as needed */
+}
+
+
+.title-bar h1 {
+    margin-bottom: 0px; /* Adjust this value as needed */
+    padding-top: 10px
 }

@@ -85,6 +85,7 @@ wss.on('connection', (ws) => {
       }
       if (clientId) {
         clients[clientId] = ws;
+        ws.clientId = clientId;
       }
       // console.log('Client ID:', clientId);
       // console.log('Received:', emotionData);
@@ -92,7 +93,8 @@ wss.on('connection', (ws) => {
 
       if (receiver in clients) {
         // sendMessageToClient(receiver, "you are Paul?");
-        // console.log('found receiver');
+        console.log('found receiver');
+        console.log(payload.timestamp);
         if (emotionData && Object.keys(emotionData).length > 0) {
           sendMessageToClient(receiver, JSON.stringify(dataToSend));
         }
@@ -114,7 +116,14 @@ wss.on('connection', (ws) => {
     }
   });
 
-
+  ws.on('close', () => {
+    if (ws.clientId) {
+      if (ws.clientId==receiver){
+      console.log(`Client with ID ${ws.clientId} disconnected`);
+      }
+      delete clients[ws.clientId];
+    }
+  });
 
   ws.on('error', (error) => {
     console.error("WebSocket Client Error:", error);

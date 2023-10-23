@@ -2,6 +2,7 @@ let currentHost = window.location.hostname;
 let wsURL = `wss://${currentHost}:4443/`;
 
 const video = document.getElementById("video");
+video.muted = true;
 const startVideoButton = document.getElementById("startVideoButton");
 const stopStreaming = document.querySelector("#stopStreaming");
 const avatarImgs = document.querySelectorAll(".img-avatar");
@@ -46,69 +47,84 @@ import CONFIG from './config.js';
 
 
 
-const socket = new WebSocket(wsURL);
+let socket;
 
-socket.onopen = function(event) {
-  console.log("Connected to the server:", event);
-  let dataToSend = {
-    clientId: clientId
+const MAX_RETRIES = 10;
+let retryCount = 0;
+const INITIAL_RETRY_DELAY = 1000; // 1 second
+let retryDelay = INITIAL_RETRY_DELAY;
+
+function createWebSocketConnection() {
+  socket = new WebSocket(wsURL);
+
+  socket.onopen = function(event) {
+    console.log("Connected to the server:", event);
+    retryCount = 0; // Reset retry count upon successful connection
+    retryDelay = INITIAL_RETRY_DELAY; // Reset the delay to the initial value
+
+    let dataToSend = {
+      clientId: clientId
+    };
+    socket.send(JSON.stringify(dataToSend));
   };
-  socket.send(JSON.stringify(dataToSend));
-};
 
-socket.onmessage = function(event) {
-  console.log("Received from server:", event.data);
-};
-socket.onclose = function(event) {
-  console.log("WebSocket connection closed:", event.code, event.reason);
-};
+  socket.onmessage = function(event) {
+    console.log("Received from server:", event.data);
+  };
 
-
-// //function to get consent
-// const consentForm = document.getElementById('consentForm');
-
-// consentForm.addEventListener('submit', function(e) {
-//   e.preventDefault();
-  
-//   const concertConsent = document.getElementById('concertConsent').checked;
-//   const researchConsent = document.getElementById('researchConsent').checked;
-  
-//   if (concertConsent && researchConsent) {
-//       // Collect and process the data as needed
-//       console.log('Concert consent:', concertConsent);
-//       console.log('Research consent:', researchConsent);
-//       alert("Thank you! We won't collect any data without your consent.");
-//       const consentFormDiv = document.getElementById('consentFormDiv');
-//       consentFormDiv.style.display = 'none';
-//       const videoWrapper = document.getElementById('video-wrapper');
-//       videoWrapper.style.display = 'block';
-//       const contentWrapper = document.getElementById('content-wrapper');
-//       contentWrapper.style.display = 'block';
-//   } else {
-//       alert("Sorry! We need your consent to interact.");
-//   }
-// });
-
-
-startVideoButton.addEventListener("click", function() {
-    // Load models if they aren't loaded yet, then start the video
+  socket.onclose = function(event) {
+    console.log("WebSocket connection closed:", event.code, event.reason);
     
-dateTime.innerText = `${sD[0]} ${sD[1]} ${sD[2]} ${sD[3]} ${sD[4]}`;
-statusCode.innerHTML = "loading module...";
-statusBox.classList.add("progress-animation");
+    // If the socket closes unexpectedly and we haven't reached max retries, try to reconnect
+    if (event.code !== 1000 && retryCount < MAX_RETRIES) { 
+      setTimeout(() => {
+        console.log("Attempting to reconnect...");
+        createWebSocketConnection();
+        retryDelay *= 2; // Double the delay for exponential backoff
+      }, retryDelay);
+      retryCount++;
+    } else {
+      console.log("Max reconnect attempts reached or clean disconnect.");
+    }
+  };
 
-    Promise.all([
-      faceapi.nets.tinyFaceDetector.loadFromUri(models),
-      faceapi.nets.faceLandmark68Net.loadFromUri(models),
-      faceapi.nets.faceRecognitionNet.loadFromUri(models),
-      faceapi.nets.faceExpressionNet.loadFromUri(models),
-      faceapi.nets.ageGenderNet.loadFromUri(models)
-    ]).then(startVideo);
+  socket.onerror = function(error) {
+    console.error("WebSocket Error:", error);
+  };
+}
+
+// Initial call to start the WebSocket connection
+createWebSocketConnection();
+
+
+
+
+startVideoButton.addEventListener("click", function () {
+  // Load models if they aren't loaded yet, then start the video
+
+  var panelDiv = document.getElementById('loader');
+  if (panelDiv.style.display === 'none' || panelDiv.style.display === '') {
+    panelDiv.style.display = 'block';
+  } else {
+    // panelDiv.style.display = 'none';
+  }
+
+  dateTime.innerText = `${sD[0]} ${sD[1]} ${sD[2]} ${sD[3]} ${sD[4]}`;
+  statusCode.innerHTML = "loading module...";
+  statusBox.classList.add("progress-animation");
+
+  Promise.all([
+    faceapi.nets.tinyFaceDetector.loadFromUri(models),
+    faceapi.nets.faceLandmark68Net.loadFromUri(models),
+    faceapi.nets.faceRecognitionNet.loadFromUri(models),
+    faceapi.nets.faceExpressionNet.loadFromUri(models),
+    faceapi.nets.ageGenderNet.loadFromUri(models)
+  ]).then(startVideo);
 });
 
 async function startVideo() {
     video.setAttribute("autoplay", "");
-    video.setAttribute("muted", "");
+    video.muted = true;
     video.setAttribute("playsinline", "");
 
     navigator.mediaDevices
@@ -156,22 +172,22 @@ const ctxChart = document.getElementById('emotionChart').getContext('2d');
 
 const emotionColors = {
   'neutral': 'rgba(200, 200, 200, 0.6)',
-  'happy': 'rgba(255, 223, 85, 0.6)',
-  'sad': 'rgba(85, 129, 255, 0.6)',
-  'angry': 'rgba(255, 85, 85, 0.6)',
-  'fearful': 'rgba(153, 85, 255, 0.6)',
-  'disgusted': 'rgba(85, 255, 85, 0.6)',
-  'surprised': 'rgba(255, 165, 0, 0.6)'
+  'happy': 'rgba(0, 186, 33, 0.6)',
+  'sad': 'rgba(53, 49, 191, 0.6)',
+  'angry': 'rgba(198, 49, 49, 0.6)',
+  'fearful': 'rgba(143, 49, 191, 0.6)',
+  'disgusted': 'rgba(49, 191, 139, 0.6)',
+  'surprised': 'rgba(194, 194, 21, 0.6)'
 };
 
 const emotionBorderColors = {
-  'neutral': 'rgba(200, 200, 200, 1)',
-  'happy': 'rgba(255, 223, 85, 1)',
-  'sad': 'rgba(85, 129, 255, 1)',
-  'angry': 'rgba(255, 85, 85, 1)',
-  'fearful': 'rgba(153, 85, 255, 1)',
-  'disgusted': 'rgba(85, 255, 85, 1)',
-  'surprised': 'rgba(255, 165, 0, 1)'
+  'neutral': 'rgba(200, 200, 200, 0.6)',
+  'happy': 'rgba(0, 186, 33, 0.6)',
+  'sad': 'rgba(53, 49, 191, 0.6)',
+  'angry': 'rgba(198, 49, 49, 0.6)',
+  'fearful': 'rgba(143, 49, 191, 0.6)',
+  'disgusted': 'rgba(49, 191, 139, 0.6)',
+  'surprised': 'rgba(194, 194, 21, 0.6)'
 };
 
 const chart = new Chart(ctxChart, {
@@ -203,11 +219,24 @@ const chart = new Chart(ctxChart, {
 });
 
 
-video.addEventListener("play", () => {
+function displayText(){
+
+  //dateTime.innerText='dumb test '; 
+}
+
+let detectionInterval;
+
+function startVideoProcessing() {
   // panel.style.height = "400px";
   // expressionTxt.style.fontSize = "3.2em";
+  let flag='a';
+  if (detectionInterval) {
+    clearInterval(detectionInterval);
+    flag='b';
+  }
   setTimeout(() => {
     statusCode.innerHTML = "just a moment please..";
+    // dateTime.innerText='bar changed';
     // avatarImgStart.style.display = "block";
     // expressionTxt.innerText = "i am still focusing 🧐";
     statusBox.style.width = "80%";
@@ -216,51 +245,47 @@ video.addEventListener("play", () => {
   
 
   // Use the offScreenCanvas for detection instead of the video
-  setInterval(async () => {
+  detectionInterval= setInterval(async () => {
+    // dateTime.innerText='interval started '+flag;
     const offScreenCanvas = document.createElement('canvas');
+    // dateTime.innerText='canvas created '+flag;
     offScreenCanvas.id = 'hiddenCanvas';
     offScreenCanvas.width = video.clientWidth;
     offScreenCanvas.height = video.clientHeight;
     const ctx = offScreenCanvas.getContext('2d',{ willReadFrequently: true });
   
+    // dateTime.innerText='ctx created '+flag;
     // Draw the video frame onto the off-screen canvas (flipped)
     ctx.translate(offScreenCanvas.width, 0);
     ctx.scale(-1, 1);
     ctx.drawImage(video, 0, 0, offScreenCanvas.width, offScreenCanvas.height);
 
-    const detections = await faceapi
-    .detectAllFaces(ctx.canvas, new faceapi.TinyFaceDetectorOptions())
-    .withFaceLandmarks()
-    .withFaceExpressions()
-    .withAgeAndGender();
+    let detections;
 
+    try {
+      await displayText();
+    }catch (error) {
+      socket.send(error);
+      dateTime.innerText="Error during display:"+ error;
+    }
 
-  // const canvas = document.getElementById('canvas');
-  // const displaySize = { width: video.clientWidth, height: video.clientHeight };
-  // console.log(displaySize);
-  // const rect = video.getBoundingClientRect();
-  // const displaySize = { width: rect.width, height: rect.height };
-  // let displaySize
-  // video.addEventListener('loadedmetadata', function() {
-  //   displaySize = { width: video.clientWidth, height: video.clientHeight };
+    try {
+      detections = await faceapi
+        .detectAllFaces(ctx.canvas, new faceapi.TinyFaceDetectorOptions())
+        .withFaceLandmarks()
+        .withFaceExpressions()
+        .withAgeAndGender();
+      // dateTime.innerText='detection run '+flag; 
+    } catch (error) {
+      socket.send(error);
+      dateTime.innerText="Error during face detection:"+ error;
+    }
 
-  // });
-
-  // faceapi.matchDimensions(canvas, displaySize);
-
-  // setInterval(async () => {
-  //   const detections = await faceapi
-  //   .detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
-  //   .withFaceLandmarks()
-  //   .withFaceExpressions()
-  //   .withAgeAndGender();
+    // dateTime.innerText =detections.length + flag;
     if (detections[0]) {
-      // console.log(detections[0])
+
       gender = detections[0].gender;
-      // status.innerHTML= "";
-      // status.style.visibility = 'hidden';
-      // status.style.dislay = 'none';
-      // statusBox.style.visibility = 'hidden';
+
       statusBox.style.width = "100%";
       statusBox.classList.remove("progress-animation");
       statusCode.innerHTML = "ready!";
@@ -283,6 +308,7 @@ video.addEventListener("play", () => {
         age : detections[0].age,
       };
       
+      // socket.send('send data');
       socket.send(JSON.stringify(payload));
 
 
@@ -335,4 +361,45 @@ video.addEventListener("play", () => {
       // avatarLamp.style.backgroundColor = "#ccc";
     }
   });
+}
+
+video.addEventListener("play", startVideoProcessing );
+
+
+async function loadModels() {
+  try {
+    await faceapi.nets.tinyFaceDetector.loadFromUri('/models');
+    await faceapi.nets.faceLandmark68Net.loadFromUri('/models');
+    await faceapi.nets.faceRecognitionNet.loadFromUri('/models');
+    await faceapi.nets.faceExpressionNet.loadFromUri('/models');
+    await faceapi.nets.ageGenderNet.loadFromUri('/models');
+    dateTime.innerText="Models loaded successfully!";
+  } catch (error) {
+    dateTime.innerText="Error loading faceapi models:"+ error;
+  }
+}
+
+
+document.addEventListener('visibilitychange', async function() {
+  if (!document.hidden) {
+    location.reload();
+    clearInterval(detectionInterval);
+    try {
+      await loadModels();
+      // dateTime.innerText = 'changed!' + "Is video paused?" + video.paused;
+      
+      await video.play();
+      // dateTime.innerText = 'video played';
+      startVideoProcessing();
+      
+    } catch (error) {
+      if (error.name === 'NotAllowedError') {
+        // Handle the error for not allowed video playback
+        console.error("Video playback error:", error);
+      } else {
+        // Handle other errors
+        console.error(error);
+      }
+    }
+  }
 });

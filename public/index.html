@@ -9,40 +9,100 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon.png" />
 </head>
 <body>
-    <!-- ... other body content ... -->
+
     <div class="title-bar">
-        <h1>Emotion detection</h1>
+        <div class="content" data-lang="de">
+        <h1>Emotions-Messung</h1>
     </div>
-    <h1>You influence the concert! </h1>
+    <div class="content" data-lang="en" style="display: none;">
+        <h1>Emotion Detection</h1>
+    </div>
+        <div class="language-switcher">
+            <button onclick="switchLanguage('en')" class="btn">English</button>
+            <button onclick="switchLanguage('de')" class="btn">Deutsch</button>
+        </div>
+    </div>
 
-<p>As part of our concert performance, we are exploring the integration of art and technology by capturing real-time emotional responses.
-    <br>
-    By using facial emotion detection technology, we aim to provide a unique, interactive experience that allows the performance to adapt based on collective audience reactions. 
-    <br>
-    Your facial data will be processed in real-time <b>locally on your cell phone</b> to determine emotional reactions, which means <b>we won't store or share identifiable data</b>. 
-    <br>
-    Example transmitted data:
-    <br>
-      <img src="/assets/example_emotion_data.png" alt="Example Emotion Data">
-      
-    <br>
-    We also assure you that any data collected will be used solely for the purpose of enhancing the concert experience and for our research to better understand audience engagement. 
-    <br>
-    Your privacy is of the utmost importance to us. By proceeding, you give us your consent to capture and utilize your emotion data.
-</p>
+    <!-- Content -->
+    <div class="content" data-lang="de">
+    
 
+        <h1>Du veränderst das Konzert! </h1>
+    
+        <p>In unserem Lied-Labor erforschen wir, wie sich Kunst und Technologie gegenseitig einbinden lassen. Dafür messen wir in Echtzeit deine emotionalen Reaktionen. Die kollektive Reaktion des Publikums beeinflusst den Verlauf des Konzerts. So wollen wir ein einzigartiges, interaktives Erlebnis schaffen. Deine Privatsphäre ist uns wichtig. Die Daten werden in Echtzeit lokal auf deinem Handy verarbeitet. Das bedeutet, wir speichern oder teilen keine identifizierbaren Daten von dir.
+ 
+            <br>
+            Ein Beispiel für übertragene Daten:
+            <br>
+            <img src="/assets/example_emotion_data.png" alt="Beispiel Emotionsdaten">
+    
+            <br>
+            Die Daten verwenden wir ausschließlich, um das Konzerterlebnisses zu erweitern und die Publikums-Beteiligung zu erforschen. Wenn du hier fortfährst, gibst du uns deine Zustimmung, deine Emotionsdaten zu verarbeiten.
+        </p>
+    </div>
+    <div class="content" data-lang="en" style="display: none;">
+  
+    
+    
 
+        <h1>You influence the concert! </h1>
+    
+        <p>As part of our concert performance, we are exploring the integration of art and technology by capturing real-time
+            emotional responses.
+            <br>
+            By using facial emotion detection technology, we aim to provide a unique, interactive experience that allows the
+            performance to adapt based on collective audience reactions.
+            <br>
+            Your facial data will be processed in real-time <b>locally on your cell phone</b> to determine emotional
+            reactions, which means <b>we won't store or share identifiable data</b>.
+            <br>
+            Example transmitted data:
+            <br>
+            <img src="/assets/example_emotion_data.png" alt="Example Emotion Data">
+    
+            <br>
+            We also assure you that any data collected will be used solely for the purpose of enhancing the concert
+            experience and for our research to better understand audience engagement.
+            <br>
+            Your privacy is of the utmost importance to us. By proceeding, you give us your consent to capture and utilize
+            your emotion data.
+        </p>
+    
+    
+    
+    
+    
+    </div>
 
-    <a id="emotionLink" href="#" class="button">Go to Emotion Page</a>
+    <div class="content" data-lang="en" style="display: none;">
+        <a id="emotionLinkEn" href="#" class="button">Start emotion detection!</a>
+    </div>
+
+    <div class="content" data-lang="de" >
+        <a id="emotionLinkDe" href="#" class="button">Emotions-Messung Starten!</a>
+    </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             let currentHost = window.location.hostname;
             let emotionURL = `https://${currentHost}:4443/emotion`;
 
             // Set the href for the link
-            document.getElementById('emotionLink').href = emotionURL;
+            document.getElementById('emotionLinkEn').href = emotionURL;
+            document.getElementById('emotionLinkDe').href = emotionURL;
         });
+
+        function switchLanguage(lang) {
+            const contents = document.querySelectorAll('.content');
+
+            contents.forEach(content => {
+                if (content.getAttribute('data-lang') === lang) {
+                    content.style.display = 'block';
+                } else {
+                    content.style.display = 'none';
+                }
+            });
+        }
     </script>
 
 
@@ -54,8 +114,9 @@
 
 <footer>
     <div class="footer-content">
-        <p>Xiao-Xiong Lin &copy; 2023. All rights reserved.</p>
-        <p>For SSL or other inquiries, <a href="mailto:ln.xxng@gmail.com">contact me</a>.</p>
+        <p>Hidalgo Festival &copy; 2023. All rights reserved.</p>
+        <p>For questions regarding copyrights and privacy on this site, please
+            <a href="mailto:ln.xxng@gmail.com">contact me</a>.</p>
     </div>
 </footer>
 
