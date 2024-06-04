@@ -20,7 +20,7 @@ after successful connection to the receiving client (i.e., your touchdesigner), 
 
 openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365
 
-change httpsOptions.passphrase in ./server.js accordingly
+change httpsOptions.passphrase in /server.js accordingly
 
 # references
 
